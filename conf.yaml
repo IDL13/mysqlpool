@@ -1,0 +1,10 @@
+//database connection config
+user: "root"
+password: "avito"
+host: "172.19.0.1"
+port: "3306"
+db: "db"
+
+//replication config
+name: default
+copy: 3
