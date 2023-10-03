@@ -1,12 +1,26 @@
-#database configuration
-user: "root"
-password: "avito"
-host: "172.19.0.1"
-port: "3306"
-db: "db"
+#database configuration main
+user_main: "root"
+password_main: "master"
+host_main: "0.0.0.0"
+port_main: "3308"
+db_main: "master"
+
+#database configuration slave_1
+user_slave_1: "root"
+password_slave_1: "slave_1"
+host_slave_1: "0.0.0.0"
+port_slave_1: "3309"
+db_slave_1: "slave_1"
+
+#database configuration slave_2
+user_slave_2: "root"
+password_slave_2: "slave_2"
+host_slave_2: "0.0.0.0"
+port_slave_2: "3310"
+db_slave_2: "slave_2"
 
 #replication configuration
-name: "default"
+name: "main"
 copy: 3
 tables_string: ["CREATE TABLE users (id NOT NULL, Name VARCHAR(255))",
                 "CREATE TABLE passwords (id NOT NULL, Password VARCHAR(255))",
