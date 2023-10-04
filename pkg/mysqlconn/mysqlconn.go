@@ -14,9 +14,24 @@ func New() *Compound {
 }
 
 type Compound struct {
-	MainCompound   *sql.DB
-	Slave1Compound *sql.DB
-	Slave2Compound *sql.DB
+	Main   mainServer
+	Slave1 slave1Server
+	Slave2 slave2Server
+}
+
+type mainServer struct {
+	MainCompound     *sql.DB
+	HealthinessProbe bool
+}
+
+type slave1Server struct {
+	Slave1Compound   *sql.DB
+	HealthinessProbe bool
+}
+
+type slave2Server struct {
+	Slave2Compound   *sql.DB
+	HealthinessProbe bool
 }
 
 func (c *Compound) GetConnection() (conn *Compound, err error) {
@@ -48,19 +63,19 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		conf.DbConfigSlave2.Db,
 	)
 
-	c.MainCompound, err = sql.Open("mysql", mainQ)
+	c.Main.MainCompound, err = sql.Open("mysql", mainQ)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
 
-	c.Slave1Compound, err = sql.Open("mysql", slave1Q)
+	c.Slave1.Slave1Compound, err = sql.Open("mysql", slave1Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
 
-	c.Slave2Compound, err = sql.Open("mysql", slave2Q)
+	c.Slave2.Slave2Compound, err = sql.Open("mysql", slave2Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
