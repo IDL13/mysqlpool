@@ -69,11 +69,15 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		os.Exit(1)
 	}
 
+	c.Main.HealthinessProbe = true
+
 	c.Slave1.Slave1Compound, err = sql.Open("mysql", slave1Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
+
+	c.Slave1.HealthinessProbe = true
 
 	c.Slave2.Slave2Compound, err = sql.Open("mysql", slave2Q)
 	if err != nil {
@@ -81,5 +85,17 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		os.Exit(1)
 	}
 
+	c.Slave2.HealthinessProbe = true
+
 	return c, nil
+}
+
+func GetHealth(compound *Compound) map[string]bool {
+	status := make(map[string]bool)
+
+	status["main"] = compound.Main.HealthinessProbe
+	status["slave1"] = compound.Slave1.HealthinessProbe
+	status["slave2"] = compound.Slave2.HealthinessProbe
+
+	return status
 }

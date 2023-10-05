@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"mysqlpool/internal/handler"
 	"net/http"
 	"os"
 	"time"
@@ -9,19 +10,19 @@ import (
 
 type Server struct {
 	s   *http.Server
-	h   hadler.Handler
+	h   handler.Handler
 	mux *http.ServeMux
 }
 
 func New() *Server {
-	s := Server{
+	s := &Server{
 		s: &http.Server{
 			Addr:           ":3333",
 			ReadTimeout:    10 * time.Second,
 			WriteTimeout:   10 * time.Second,
 			MaxHeaderBytes: 1 << 20,
 		},
-		h:   hadnler.New(),
+		h:   handler.New(),
 		mux: http.NewServeMux(),
 	}
 
