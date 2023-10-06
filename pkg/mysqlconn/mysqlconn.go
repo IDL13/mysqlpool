@@ -27,11 +27,13 @@ type mainServer struct {
 type slave1Server struct {
 	Slave1Compound   *sql.DB
 	HealthinessProbe bool
+	Count            uint64
 }
 
 type slave2Server struct {
 	Slave2Compound   *sql.DB
 	HealthinessProbe bool
+	Count            uint64
 }
 
 func (c *Compound) GetConnection() (conn *Compound, err error) {
@@ -79,6 +81,8 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 
 	c.Slave1.HealthinessProbe = true
 
+	c.Slave1.Count = 1
+
 	c.Slave2.Slave2Compound, err = sql.Open("mysql", slave2Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
@@ -86,6 +90,8 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 	}
 
 	c.Slave2.HealthinessProbe = true
+
+	c.Slave2.Count = 1
 
 	return c, nil
 }

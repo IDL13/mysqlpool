@@ -9,18 +9,18 @@ import (
 
 func New() *Balancer {
 	return &Balancer{
-		connections: mysqlconn.New(),
+		Connections: mysqlconn.New(),
 	}
 }
 
 type Balancer struct {
-	connections *mysqlconn.Compound
+	Connections *mysqlconn.Compound
 }
 
 func (b *Balancer) handler(sqlQuery, request, mod string, args ...any) (interface{}, error) {
 	switch request {
 	case "Exec":
-		conf, err := b.connections.GetConnection()
+		conf, err := b.Connections.GetConnection()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 			os.Exit(1)
@@ -34,7 +34,7 @@ func (b *Balancer) handler(sqlQuery, request, mod string, args ...any) (interfac
 		return res, nil
 
 	case "Query":
-		conf, err := b.connections.GetConnection()
+		conf, err := b.Connections.GetConnection()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 			os.Exit(1)
@@ -48,7 +48,7 @@ func (b *Balancer) handler(sqlQuery, request, mod string, args ...any) (interfac
 		return row, nil
 
 	case "QueryRow":
-		conf, err := b.connections.GetConnection()
+		conf, err := b.Connections.GetConnection()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 			os.Exit(1)
@@ -69,9 +69,9 @@ func (b *Balancer) handler(sqlQuery, request, mod string, args ...any) (interfac
 func (b *Balancer) GetHealth() map[string]bool {
 	status := make(map[string]bool)
 
-	status["main"] = b.connections.Main.HealthinessProbe
-	status["slave1"] = b.connections.Slave1.HealthinessProbe
-	status["slave2"] = b.connections.Slave2.HealthinessProbe
+	status["main"] = b.Connections.Main.HealthinessProbe
+	status["slave1"] = b.Connections.Slave1.HealthinessProbe
+	status["slave2"] = b.Connections.Slave2.HealthinessProbe
 
 	return status
 }
