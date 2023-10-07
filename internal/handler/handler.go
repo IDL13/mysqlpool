@@ -45,11 +45,24 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 		if conf.Slave1.Count > conf.Slave2.Count {
 			h.wg.Add(1)
 
+			var answer [][]any
+
 			go func() {
-				_, err = conf.Slave1.Slave1Compound.Exec(q.SqlQuery, q.Args)
+				row, err := conf.Slave1.Slave1Compound.Query(q.SqlQuery, q.Args)
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
 					os.Exit(1)
+				}
+
+				for row.Next() {
+
+					var pars []any
+
+					err = row.Scan(&pars)
+					if err != nil {
+						panic(err)
+					}
+					answer = append(answer, pars)
 				}
 
 				atomic.AddUint64(&conf.Slave1.Count, 1)
@@ -58,14 +71,34 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 			}()
 
 			h.wg.Wait()
+
+			js, err := json.Marshal(answer)
+			if err != nil {
+				panic(err)
+			}
+
+			resp.Write(js)
 		} else {
 			h.wg.Add(1)
 
+			var answer [][]any
+
 			go func() {
-				_, err = conf.Slave2.Slave2Compound.Exec(q.SqlQuery, q.Args)
+				row, err := conf.Slave2.Slave2Compound.Query(q.SqlQuery, q.Args)
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
 					os.Exit(1)
+				}
+
+				for row.Next() {
+
+					var pars []any
+
+					err = row.Scan(&pars)
+					if err != nil {
+						panic(err)
+					}
+					answer = append(answer, pars)
 				}
 
 				atomic.AddUint64(&conf.Slave2.Count, 1)
@@ -74,6 +107,13 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 			}()
 
 			h.wg.Wait()
+
+			js, err := json.Marshal(answer)
+			if err != nil {
+				panic(err)
+			}
+
+			resp.Write(js)
 		}
 
 	} else {

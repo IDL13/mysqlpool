@@ -14,9 +14,10 @@ func New() *Compound {
 }
 
 type Compound struct {
-	Main   mainServer
-	Slave1 slave1Server
-	Slave2 slave2Server
+	Main          mainServer
+	Slave1        slave1Server
+	Slave2        slave2Server
+	RowFunctional []string
 }
 
 type mainServer struct {
@@ -92,6 +93,8 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 	c.Slave2.HealthinessProbe = true
 
 	c.Slave2.Count = 1
+
+	c.RowFunctional = conf.DbFunctional.Row
 
 	return c, nil
 }

@@ -19,9 +19,5 @@ host_slave_2: "0.0.0.0"
 port_slave_2: "3310"
 db_slave_2: "slave_2"
 
-#replication configuration
-name: "main"
-copy: 3
-tables_string: ["CREATE TABLE users (id NOT NULL, Name VARCHAR(255))",
-                "CREATE TABLE passwords (id NOT NULL, Password VARCHAR(255))",
+
               ]

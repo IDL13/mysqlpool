@@ -14,7 +14,6 @@ func new() *configuration {
 
 type Configuration interface {
 	GetDbConfig() *configuration
-	GetReplicationConfig() *replicationConfig
 }
 
 type configuration struct {
@@ -45,10 +44,4 @@ type dbConfigSlave2 struct {
 	Host     string `yaml:"host_main_slave_2"`
 	Port     string `yaml:"port_main_slave_2"`
 	Db       string `yaml:"db_main_slave_2"`
-}
-
-type replicationConfig struct {
-	Name   string   `yaml:"name"`
-	Copy   int      `yaml:"copy"`
-	Tables []string `yaml:"tables_string"`
 }

@@ -26,16 +26,16 @@ func (c configuration) GetDbConfig() *configuration {
 	return conf
 }
 
-func (c configuration) GetReplicationConfig() *replicationConfig {
-	conf := &replicationConfig{}
-
-	info, err := os.ReadFile("./conf.yaml")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading data from conf file: %v\n", err)
-		os.Exit(1)
-	}
-
-	yaml.Unmarshal(info, conf)
-
-	return conf
-}
+//func (c configuration) GetReplicationConfig() *replicationConfig {
+//	conf := &replicationConfig{}
+//
+//	info, err := os.ReadFile("./conf.yaml")
+//	if err != nil {
+//		fmt.Fprintf(os.Stderr, "Error reading data from conf file: %v\n", err)
+//		os.Exit(1)
+//	}
+//
+//	yaml.Unmarshal(info, conf)
+//
+//	return conf
+//}
