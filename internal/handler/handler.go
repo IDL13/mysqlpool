@@ -3,8 +3,11 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"mysqlpool/pkg/mysqlconn"
 	"net/http"
 	"os"
+	"sync"
 	"sync/atomic"
 )
 
@@ -141,13 +144,45 @@ func (h *Handler) InsertHandler(resp http.ResponseWriter, req *http.Request) {
 			os.Exit(1)
 		}
 
+		err = migration(reqJson, q, conf)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Fale migration on slaves: %v\n", err)
+			os.Exit(1)
+		}
+
 	} else {
 		resp.Write([]byte("This url only handles POST requests"))
 	}
 }
 
-func (h *Handler) MakeMigrationHandler(resp http.ResponseWriter, req *http.Request) {
+func migration(body io.ReadCloser, q queryStruct, conf *mysqlconn.Compound) error {
+	var wg sync.WaitGroup
 
+	wg.Add(2)
+
+	go func() {
+		_, err := conf.Slave1.Slave1Compound.Exec(q.SqlQuery, q.Args)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
+			os.Exit(1)
+		}
+
+		wg.Done()
+	}()
+
+	go func() {
+		_, err := conf.Slave2.Slave2Compound.Exec(q.SqlQuery, q.Args)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
+			os.Exit(1)
+		}
+
+		wg.Done()
+	}()
+
+	wg.Wait()
+
+	return nil
 }
 
 func (h *Handler) MigrateHandler(resp http.ResponseWriter, req *http.Request) {

@@ -34,7 +34,7 @@ func New() *Server {
 	return s
 }
 
-func (s *Server) Run() {
+func (s *Server) Run(stop chan bool) {
 	fmt.Println(`
 ╔══╗╔══╗─╔╗───╔╗╔══╗
 ╚╗╔╝║╔╗╚╗║║──╔╝║╚═╗║

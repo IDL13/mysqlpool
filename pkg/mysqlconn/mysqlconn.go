@@ -94,8 +94,6 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 
 	c.Slave2.Count = 1
 
-	c.RowFunctional = conf.DbFunctional.Row
-
 	return c, nil
 }
 
