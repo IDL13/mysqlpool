@@ -24,10 +24,17 @@ func (h *Handler) StartServer(resp http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) HealthinessProbe(resp http.ResponseWriter, req *http.Request) {
-	status := h.Balancer.GetHealth()
+	conf, err := h.Balancer.Connections.GetConnection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
+		os.Exit(1)
+	}
+
+	status := mysqlconn.GetHealth(conf)
+
 	for name, s := range status {
-		resp.Write([]byte(name + "\n"))
-		resp.Write([]byte(boolString(s)))
+		resp.Write([]byte(name + "\t"))
+		resp.Write([]byte(boolString(s) + "\n"))
 	}
 }
 

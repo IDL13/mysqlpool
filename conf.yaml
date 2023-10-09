@@ -7,17 +7,15 @@ db_main: "master"
 
 #database configuration slave_1
 user_slave_1: "root"
-password_slave_1: "slave_1"
+password_slave_1: "slave1"
 host_slave_1: "0.0.0.0"
 port_slave_1: "3309"
-db_slave_1: "slave_1"
+db_slave_1: "slave1"
 
 #database configuration slave_2
 user_slave_2: "root"
-password_slave_2: "slave_2"
+password_slave_2: "slave2"
 host_slave_2: "0.0.0.0"
 port_slave_2: "3310"
-db_slave_2: "slave_2"
+db_slave_2: "slave2"
 
-
-              ]

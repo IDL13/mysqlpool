@@ -26,10 +26,12 @@ func New() *Server {
 		mux: http.NewServeMux(),
 	}
 
+	s.s.Handler = s.mux
+
 	s.mux.HandleFunc("/", s.h.StartServer)
-	s.mux.HandleFunc("probe", s.h.HealthinessProbe)
-	s.mux.HandleFunc("read/", s.h.ReadHandler)
-	s.mux.HandleFunc("insert/", s.h.InsertHandler)
+	s.mux.HandleFunc("/probe", s.h.HealthinessProbe)
+	s.mux.HandleFunc("/read", s.h.ReadHandler)
+	s.mux.HandleFunc("/insert", s.h.InsertHandler)
 
 	return s
 }
