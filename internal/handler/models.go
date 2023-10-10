@@ -1,18 +1,18 @@
 package handler
 
 import (
-	"mysqlpool/internal/balancer"
+	"mysqlpool/pkg/mysqlconn"
 	"sync"
 )
 
 func New() Handler {
 	return Handler{
-		Balancer: balancer.New(),
+		Compound: mysqlconn.New(),
 	}
 }
 
 type Handler struct {
-	Balancer    *balancer.Balancer
+	Compound    *mysqlconn.Compound
 	QueryStruct *queryStruct
 	wg          sync.WaitGroup
 }

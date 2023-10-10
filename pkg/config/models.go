@@ -33,15 +33,15 @@ type dbConfigMain struct {
 type dbConfigSlave1 struct {
 	User     string `yaml:"user_slave_1"`
 	Password string `yaml:"password_slave_1"`
-	Host     string `yaml:"host_main_slave_1"`
-	Port     string `yaml:"port_main_slave_1"`
-	Db       string `yaml:"db_main_slave_1"`
+	Host     string `yaml:"host_slave_1"`
+	Port     string `yaml:"port_slave_1"`
+	Db       string `yaml:"db_slave_1"`
 }
 
 type dbConfigSlave2 struct {
 	User     string `yaml:"user_slave_2"`
 	Password string `yaml:"password_slave_2"`
-	Host     string `yaml:"host_main_slave_2"`
-	Port     string `yaml:"port_main_slave_2"`
-	Db       string `yaml:"db_main_slave_2"`
+	Host     string `yaml:"host_slave_2"`
+	Port     string `yaml:"port_slave_2"`
+	Db       string `yaml:"db_slave_2"`
 }

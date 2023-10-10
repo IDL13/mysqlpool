@@ -24,7 +24,7 @@ func (h *Handler) StartServer(resp http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) HealthinessProbe(resp http.ResponseWriter, req *http.Request) {
-	conf, err := h.Balancer.Connections.GetConnection()
+	conf, err := h.Compound.GetConnection()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
@@ -46,7 +46,7 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 
 		json.NewDecoder(reqJson).Decode(&q)
 
-		conf, err := h.Balancer.Connections.GetConnection()
+		conf, err := h.Compound.GetConnection()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 			os.Exit(1)
@@ -139,7 +139,7 @@ func (h *Handler) InsertHandler(resp http.ResponseWriter, req *http.Request) {
 
 		json.NewDecoder(reqJson).Decode(&q)
 
-		conf, err := h.Balancer.Connections.GetConnection()
+		conf, err := h.Compound.GetConnection()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 			os.Exit(1)

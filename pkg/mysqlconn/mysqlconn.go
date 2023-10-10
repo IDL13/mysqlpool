@@ -72,15 +72,11 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		os.Exit(1)
 	}
 
-	c.Main.HealthinessProbe = true
-
 	c.Slave1.Slave1Compound, err = sql.Open("mysql", slave1Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
-
-	c.Slave1.HealthinessProbe = true
 
 	c.Slave1.Count = 1
 
@@ -90,19 +86,40 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		os.Exit(1)
 	}
 
-	c.Slave2.HealthinessProbe = true
-
 	c.Slave2.Count = 1
 
 	return c, nil
 }
 
-func GetHealth(compound *Compound) map[string]bool {
+func GetHealth(c *Compound) map[string]bool {
+	connection, err := c.GetConnection()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unbale to connection to database 97 string: %v\n", err)
+		os.Exit(1)
+	}
+
 	status := make(map[string]bool)
 
-	status["main"] = compound.Main.HealthinessProbe
-	status["slave1"] = compound.Slave1.HealthinessProbe
-	status["slave2"] = compound.Slave2.HealthinessProbe
+	_, err = connection.Main.MainCompound.Exec(`SHOW TABLES`)
+	if err != nil {
+		status["main"] = false
+	} else {
+		status["main"] = true
+	}
+
+	_, err = connection.Slave1.Slave1Compound.Exec(`SHOW TABLES`)
+	if err != nil {
+		status["slave1"] = false
+	} else {
+		status["slave1"] = true
+	}
+
+	_, err = connection.Slave2.Slave2Compound.Exec(`SHOW TABLES`)
+	if err != nil {
+		status["slave2"] = false
+	} else {
+		status["slave2"] = true
+	}
 
 	return status
 }
