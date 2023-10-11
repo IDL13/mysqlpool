@@ -32,6 +32,7 @@ func New() *Server {
 	s.mux.HandleFunc("/probe", s.h.HealthinessProbe)
 	s.mux.HandleFunc("/read", s.h.ReadHandler)
 	s.mux.HandleFunc("/insert", s.h.InsertHandler)
+	s.mux.HandleFunc("/create_test", s.h.TestHandler)
 
 	return s
 }

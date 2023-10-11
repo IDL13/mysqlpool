@@ -16,8 +16,8 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: "main"
-      MYSQL_ROOT_PASSWORD: "main"
+      MYSQL_DATABASE: 'master'
+      MYSQL_ROOT_PASSWORD: 'master'
     ports:
       - "3308:3308"
 
@@ -25,17 +25,17 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: "slave1"
-      MYSQL_ROOT_PASSWORD: "slave1"
+      MYSQL_DATABASE: 'slave1'
+      MYSQL_ROOT_PASSWORD: 'slave1'
     ports:
-      - "3308:3308"
+      - "3309:3309"
 
   slave2:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: "slave2"
-      MYSQL_ROOT_PASSWORD: "slave2"
+      MYSQL_DATABASE: 'slave2'
+      MYSQL_ROOT_PASSWORD: 'slave2'
     ports:
-      - "3308:3308"
+      - "3310:3310"
   

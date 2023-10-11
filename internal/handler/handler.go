@@ -15,6 +15,8 @@ func boolString(b bool) string {
 	}
 }
 
+//test handlers for example
+
 func (h *Handler) StartServer(resp http.ResponseWriter, req *http.Request) {
 	resp.Write([]byte("SERVER STARTED"))
 }
@@ -57,14 +59,14 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) InsertHandler(resp http.ResponseWriter, req *http.Request) {
-	_, err := h.router.Redirection("write").Exec(`insert into name(id, name) value(2, "Oleg")`)
+	_, err := h.router.Redirection("write").Exec(`insert into testing(id, name, count) value(1, "Ilya", 1)`)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
 		os.Exit(1)
 	}
-	h.router.Migrate(`insert into name(id, name) value(2, "oleg")`)
+	h.router.Migrate(`insert into testing(id, name, count) value(1, "Ilya", 1)`)
 }
 
-func (h *Handler) MigrateHandler(resp http.ResponseWriter, req *http.Request) {
+func (h *Handler) TestHandler(resp http.ResponseWriter, req *http.Request) {
 
 }

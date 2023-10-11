@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"mysqlpool/pkg/mysqlconn"
 	"os"
+	"sync"
 )
 
 func New() *Router {
@@ -40,23 +41,37 @@ func (r *Router) Redirection(flag string) *sql.DB {
 }
 
 func (r *Router) Migrate(q string) error {
+	var wg sync.WaitGroup
+
 	conf, err := r.Compound.GetConnection()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
 
-	_, err = conf.Slave1.Slave1Compound.Exec(q)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to Exex {router 41}: %v\n", err)
-		os.Exit(1)
-	}
+	wg.Add(2)
 
-	_, err = conf.Slave2.Slave2Compound.Exec(q)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to Exex {router 41}: %v\n", err)
-		os.Exit(1)
-	}
+	go func() {
+		_, err = conf.Slave1.Slave1Compound.Exec(q)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to Exex {router 51}: %v\n", err)
+			os.Exit(1)
+		}
+
+		wg.Done()
+	}()
+
+	go func() {
+		_, err = conf.Slave2.Slave2Compound.Exec(q)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to Exex {router 41}: %v\n", err)
+			os.Exit(1)
+		}
+
+		wg.Done()
+	}()
+
+	wg.Wait()
 
 	return nil
 }

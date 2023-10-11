@@ -100,21 +100,21 @@ func GetHealth(c *Compound) map[string]bool {
 
 	status := make(map[string]bool)
 
-	_, err = connection.Main.MainCompound.Exec(`SHOW TABLES`)
+	_, err = connection.Main.MainCompound.Exec(`SHOW DATABASES`)
 	if err != nil {
 		status["main"] = false
 	} else {
 		status["main"] = true
 	}
 
-	_, err = connection.Slave1.Slave1Compound.Exec(`SHOW TABLES`)
+	_, err = connection.Slave1.Slave1Compound.Exec(`SHOW DATABASES`)
 	if err != nil {
 		status["slave1"] = false
 	} else {
 		status["slave1"] = true
 	}
 
-	_, err = connection.Slave2.Slave2Compound.Exec(`SHOW TABLES`)
+	_, err = connection.Slave2.Slave2Compound.Exec(`SHOW DATABASES`)
 	if err != nil {
 		status["slave2"] = false
 	} else {
