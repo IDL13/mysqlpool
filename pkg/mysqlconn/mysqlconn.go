@@ -78,15 +78,11 @@ func (c *Compound) GetConnection() (conn *Compound, err error) {
 		os.Exit(1)
 	}
 
-	c.Slave1.Count = 1
-
 	c.Slave2.Slave2Compound, err = sql.Open("mysql", slave2Q)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to databases: %v\n", err)
 		os.Exit(1)
 	}
-
-	c.Slave2.Count = 1
 
 	return c, nil
 }
