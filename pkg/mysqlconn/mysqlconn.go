@@ -28,13 +28,11 @@ type mainServer struct {
 type slave1Server struct {
 	Slave1Compound   *sql.DB
 	HealthinessProbe bool
-	Count            uint64
 }
 
 type slave2Server struct {
 	Slave2Compound   *sql.DB
 	HealthinessProbe bool
-	Count            uint64
 }
 
 func (c *Compound) GetConnection() (conn *Compound, err error) {

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"mysqlpool/internal/counter"
 	"mysqlpool/internal/router"
 	"mysqlpool/pkg/mysqlconn"
 	"sync"
@@ -10,6 +11,7 @@ func New() Handler {
 	return Handler{
 		Compound: mysqlconn.New(),
 		router:   router.New(),
+		counter:  counter.New(),
 	}
 }
 
@@ -18,6 +20,7 @@ type Handler struct {
 	QueryStruct *queryStruct
 	wg          sync.WaitGroup
 	router      *router.Router
+	counter     *counter.Counter
 }
 
 type queryStruct struct {

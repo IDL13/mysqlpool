@@ -30,6 +30,19 @@ func (h *Handler) HealthinessProbe(resp http.ResponseWriter, req *http.Request) 
 
 	status := mysqlconn.GetHealth(conf)
 
+	m, s1, s2 := h.counter.LoadCounter()
+
+	fmt.Println(m, s1, s2)
+
+	resp.Write([]byte("main connections" + "\t"))
+	resp.Write([]byte(h.counter.ConvertOnString(m) + "\n"))
+
+	resp.Write([]byte("slave1 connections" + "\t"))
+	resp.Write([]byte(h.counter.ConvertOnString(s1) + "\n"))
+
+	resp.Write([]byte("Slave2 connections" + "\t"))
+	resp.Write([]byte(h.counter.ConvertOnString(s2) + "\n"))
+
 	for name, s := range status {
 		resp.Write([]byte(name + "\t"))
 		resp.Write([]byte(boolString(s) + "\n"))
