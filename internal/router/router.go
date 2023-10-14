@@ -26,9 +26,9 @@ func (r *Router) Redirection(flag string) *sql.DB {
 	}
 
 	switch flag {
-	case "write":
+	case "w":
 		return conf.Main.MainCompound
-	case "read":
+	case "r":
 		status := mysqlconn.GetHealth(conf)
 		if status["slave1"] == true {
 			return conf.Slave1.Slave1Compound

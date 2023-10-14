@@ -32,8 +32,6 @@ func (h *Handler) HealthinessProbe(resp http.ResponseWriter, req *http.Request) 
 
 	m, s1, s2 := h.counter.LoadCounter()
 
-	fmt.Println(m, s1, s2)
-
 	resp.Write([]byte("main connections" + "\t"))
 	resp.Write([]byte(h.counter.ConvertOnString(m) + "\n"))
 
@@ -52,7 +50,7 @@ func (h *Handler) HealthinessProbe(resp http.ResponseWriter, req *http.Request) 
 func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
 
-		row, err := h.router.Redirection("read").Query("select * from name")
+		row, err := h.router.Redirection("r").Query("select * from name")
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
 			os.Exit(1)
@@ -72,7 +70,7 @@ func (h *Handler) ReadHandler(resp http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) InsertHandler(resp http.ResponseWriter, req *http.Request) {
-	_, err := h.router.Redirection("write").Exec(`insert into testing(id, name, count) value(1, "Ilya", 1)`)
+	_, err := h.router.Redirection("w").Exec(`insert into testing(id, name, count) value(1, "Ilya", 1)`)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Fale Exec request: %v\n", err)
 		os.Exit(1)
